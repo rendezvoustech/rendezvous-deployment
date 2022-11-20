@@ -1,0 +1,10 @@
+if not os.path.exists('../../../../config-service'):
+  fail('Please "git clone" the backend repo in ../../../../config-service!')
+
+if not os.path.exists('../../../../participant-service'):
+  fail('Please "git clone" the backend repo in ../../../../participant-service!')
+
+include('../../../../config-service/Tiltfile')
+include('../../../../participant-service/Tiltfile')
+
+update_settings(max_parallel_updates=1)

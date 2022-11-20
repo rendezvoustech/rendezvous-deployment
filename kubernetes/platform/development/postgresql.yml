@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rendezvous-postgres
+  labels:
+    db: rendezvous-postgres
+spec:
+  selector:
+    matchLabels:
+      db: rendezvous-postgres
+  template:
+    metadata:
+      labels:
+        db: rendezvous-postgres
+    spec:
+      containers:
+        - name: rendezvous-postgres
+          image: postgres:14.4
+          env:
+            - name: POSTGRES_USER
+              value: user
+            - name: POSTGRES_PASSWORD
+              value: password
+            - name: POSTGRES_DB
+              value: rendezvousdb_participant
+          resources:
+            requests:
+              cpu: 100m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 120Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rendezvous-postgres
+  labels:
+    db: rendezvous-postgres
+spec:
+  type: ClusterIP
+  selector:
+    db: rendezvous-postgres
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432

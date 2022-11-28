@@ -1,3 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  labels:
+    db: rendezvous-postgres
+data:
+  init.sql: |
+    CREATE DATABASE rendezvousdb_catalog;
+    CREATE DATABASE rendezvousdb_order;
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -21,8 +33,6 @@ spec:
               value: user
             - name: POSTGRES_PASSWORD
               value: password
-            - name: POSTGRES_DB
-              value: rendezvousdb_participant
           resources:
             requests:
               cpu: 100m
@@ -30,19 +40,26 @@ spec:
             limits:
               cpu: 200m
               memory: 120Mi
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: postgres-config-volume
+      volumes:
+        - name: postgres-config-volume
+          configMap:
+            name: postgres-config
 
 ---
 
 apiVersion: v1
 kind: Service
 metadata:
-  name: rendezvous-postgres
+  name: polar-postgres
   labels:
-    db: rendezvous-postgres
+    db: polar-postgres
 spec:
   type: ClusterIP
   selector:
-    db: rendezvous-postgres
+    db: polar-postgres
   ports:
     - protocol: TCP
       port: 5432

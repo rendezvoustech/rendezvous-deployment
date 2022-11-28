@@ -21,6 +21,23 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://rendezvous-postgres:5432/rendezvousdb_participant
       - SPRING_PROFILES_ACTIVE=testdata
 
+  rendezvous-service:
+    depends_on:
+      - rendezvous-postgres
+    image: "rendezvous-service"
+    container_name: "rendezvous-service"
+    ports:
+      - 9002:9002
+      - 8002:8002
+    environment:
+      # Buildpacks environment variable to enable debug through a socket on port 8002
+      - BPL_DEBUG_ENABLED=true
+      - BPL_DEBUG_PORT=8002
+      - RENDEZVOUS_PARTICIPANT_SERVICE_URI=http://participant-service:9001
+      - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
+      - SPRING_R2DBC_URL=r2dbc:postgresql://rendezvous-postgres:5432/rendezvous_rendezvous
+      - SPRING_FLYWAY_URL=jdbc:postgresql://rendezvous-postgres:5432/rendezvous_rendezvous
+
   config-service:
     image: "config-service"
     container_name: "config-service"
@@ -44,4 +61,5 @@ services:
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=rendezvousdb_participant
+    volumes:
+      - ./postgresql/init.sql:/docker-entrypoint-initdb.d/init.sql

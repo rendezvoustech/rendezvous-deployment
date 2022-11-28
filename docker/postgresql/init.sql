@@ -1,0 +1,2 @@
+CREATE DATABASE rendezvousdb_rendezvous;
+CREATE DATABASE rendezvousdb_participant;

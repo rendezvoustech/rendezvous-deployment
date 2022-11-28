@@ -35,8 +35,8 @@ services:
       - BPL_DEBUG_PORT=8002
       - RENDEZVOUS_PARTICIPANT_SERVICE_URI=http://participant-service:9001
       - SPRING_CLOUD_CONFIG_URI=http://config-service:8888
-      - SPRING_R2DBC_URL=r2dbc:postgresql://rendezvous-postgres:5432/rendezvous_rendezvous
-      - SPRING_FLYWAY_URL=jdbc:postgresql://rendezvous-postgres:5432/rendezvous_rendezvous
+      - SPRING_R2DBC_URL=r2dbc:postgresql://rendezvous-postgres:5432/rendezvousdb_rendezvous
+      - SPRING_FLYWAY_URL=jdbc:postgresql://rendezvous-postgres:5432/rendezvousdb_rendezvous
 
   config-service:
     image: "config-service"

@@ -1,10 +1,18 @@
 if not os.path.exists('../../../../config-service'):
   fail('Please "git clone" the backend repo in ../../../../config-service!')
 
+if not os.path.exists('../../../../edge-service'):
+  fail('Please "git clone" the backend repo in ../../../../edge-service!')
+
 if not os.path.exists('../../../../participant-service'):
   fail('Please "git clone" the backend repo in ../../../../participant-service!')
 
+if not os.path.exists('../../../../rendezvous-service'):
+  fail('Please "git clone" the backend repo in ../../../../rendezvous-service!')
+
 include('../../../../config-service/Tiltfile')
+include('../../../../edge-service/Tiltfile')
 include('../../../../participant-service/Tiltfile')
+include('../../../../rendezvous-service/Tiltfile')
 
 update_settings(max_parallel_updates=1)

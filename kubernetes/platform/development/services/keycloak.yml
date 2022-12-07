@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rendezvous-keycloak
+  labels:
+    app: rendezvous-keycloak
+spec:
+  selector:
+    matchLabels:
+      app: rendezvous-keycloak
+  template:
+    metadata:
+      labels:
+        app: rendezvous-keycloak
+    spec:
+      containers:
+        - name: rendezvous-keycloak
+          image: quay.io/keycloak/keycloak:19.0
+          args:
+            - "start-dev"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: KEYCLOAK_ADMIN
+              value: user
+            - name: KEYCLOAK_ADMIN_PASSWORD
+              value: password
+            - name: JAVA_OPTS_APPEND
+              value: "-Dkeycloak.import=/opt/keycloak/data/import/realm-config.json"
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 350Mi
+            limits:
+              cpu: 500m
+              memory: 750Mi
+          volumeMounts:
+            - name: rendezvous-keycloak-config-volume
+              mountPath: /opt/keycloak/data/import
+      volumes:
+        - name: rendezvous-keycloak-config-volume
+          configMap:
+            name: rendezvous-keycloak
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rendezvous-keycloak
+  labels:
+    app: rendezvous-keycloak
+spec:
+  type: ClusterIP
+  selector:
+    app: rendezvous-keycloak
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: keycloak-ingress
+  labels:
+    app: rendezvous-keycloak
+spec:
+  rules:
+    - host: rendezvous-keycloak
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: rendezvous-keycloak
+                port:
+                  number: 80

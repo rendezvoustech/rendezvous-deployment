@@ -1,0 +1,5 @@
+rendezvous:
+  greeting: Welcome to Rendezvous tech from a production Kubernetes environment!
+spring:
+  config:
+    import: configtree:/workspace/secrets/*/

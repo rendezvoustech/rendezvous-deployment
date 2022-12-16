@@ -2,24 +2,27 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - github.com/rendezvoustech/rendezvous-service/k8s?ref=main
+- github.com/rendezvoustech/rendezvous-service/k8s?ref=main
 
 patchesStrategicMerge:
-  - patch-env.yml
-  - patch-resources.yml
-  - patch-volumes.yml
+- patch-env.yml
+- patch-resources.yml
+- patch-volumes.yml
 
 configMapGenerator:
-  - behavior: merge
-    files:
-      - application-prod.yml
-    name: rendezvous-config
+- behavior: merge
+  files:
+  - application-prod.yml
+  name: rendezvous-config
 
 images:
-  - name: order-service
-    newName: ghcr.io/rendezvoustech/rendezvous-service
-    newTag: latest
+- name: order-service
+  newName: ghcr.io/rendezvoustech/rendezvous-service
+  newTag: latest
+- name: rendezvous-service
+  newName: ghcr.io/rendezvoustech/rendezvous-service
+  newTag: cfa312bcb14986f82538775ca36b610e8a55c4e3
 
 replicas:
-  - count: 1
-    name: rendezvous-service
+- count: 1
+  name: rendezvous-service

@@ -19,7 +19,7 @@ configMapGenerator:
 images:
 - name: edge-service
   newName: ghcr.io/rendezvoustech/edge-service
-  newTag: f73c9f6d79021b18faec03841114ef2c202e2cb9
+  newTag: 19516484c6d6e24bfdbf9b7f90eb6b1ac70f0470
 
 replicas:
 - count: 1

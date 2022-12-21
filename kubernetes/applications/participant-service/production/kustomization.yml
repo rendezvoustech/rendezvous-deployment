@@ -18,7 +18,7 @@ configMapGenerator:
 images:
 - name: participant-service
   newName: ghcr.io/rendezvoustech/participant-service
-  newTag: 80cebc779d45cd6ab259c74019931f7b5bba10fb
+  newTag: 06250747fa8149237905046719aafb3aadf9247e
 
 replicas:
 - count: 2
